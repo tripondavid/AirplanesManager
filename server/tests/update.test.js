@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 // Import your routes
-const airplaneRoutes = require("./routes/airplanesRoutes");
+const airplaneRoutes = require("../routes/airplanesRoutes");
 
 // Create a new instance of Express application
 const app = express();

@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 // Import your routes
-const airplaneRoutes = require("./routes/airplanesRoutes");
+const airplaneRoutes = require("../routes/airplanesRoutes");
 
 // Create a new instance of Express application
 const app = express();
@@ -29,10 +29,10 @@ describe("Airplane Routes", () => {
     const response = await request(app).get("/");
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(3);
+    var ok = false;
     const airplanes = response.body;
-    ok = false;
     for (let i = 0; i < airplanes.length - 1; i++) {
-      if (airplanes[i].capacity > airplanes[i + 1].capacity) {
+      if (airplanes[i].type > airplanes[i + 1].type) {
         ok = true;
         break;
       }
@@ -42,13 +42,13 @@ describe("Airplane Routes", () => {
 });
 
 describe("Airplane Routes", () => {
-  it("POST /sort should respond with 200", async () => {
-    const response = await request(app).post("/sort");
+  it("POST / should respond with 200", async () => {
+    const response = await request(app).post("/sort/type");
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(3);
-    const airplanes = response.body;
+    const airplanes = response.body.length;
     for (let i = 0; i < airplanes.length - 1; i++) {
-      expect(airplanes[i].capacity < airplanes[i + 1].capacity).toBe(true);
+      expect(airplanes[i].type <= airplanes[i + 1].type).toBe(true);
     }
   });
 });

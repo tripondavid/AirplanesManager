@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 // Import your routes
-const airplaneRoutes = require("./routes/airplanesRoutes");
+const airplaneRoutes = require("../routes/airplanesRoutes");
 
 // Create a new instance of Express application
 const app = express();
@@ -29,12 +29,26 @@ describe("Airplane Routes", () => {
     const response = await request(app).get("/");
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(3);
+    const airplanes = response.body;
+    ok = false;
+    for (let i = 0; i < airplanes.length - 1; i++) {
+      if (airplanes[i].capacity > airplanes[i + 1].capacity) {
+        ok = true;
+        break;
+      }
+    }
+    expect(ok).toBe(true);
   });
 });
 
 describe("Airplane Routes", () => {
-  it("GET /airplanes should respond with 404", async () => {
-    const response = await request(app).get("/airplanes");
-    expect(response.status).toBe(404);
+  it("POST /sort should respond with 200", async () => {
+    const response = await request(app).post("/sort");
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(3);
+    const airplanes = response.body;
+    for (let i = 0; i < airplanes.length - 1; i++) {
+      expect(airplanes[i].capacity < airplanes[i + 1].capacity).toBe(true);
+    }
   });
 });
