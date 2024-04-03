@@ -1,0 +1,22 @@
+* {
+    margin: 0.1rem;
+  }
+  
+  .input-div {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .input-style {
+    border-radius: 10px;
+    padding: 0.5rem;
+  }
+  
+  .input-button {
+    border-radius: 10px;
+  }
+  
+  .pagination-div {
+    display: flex;
+    gap: 2rem;
+  }
