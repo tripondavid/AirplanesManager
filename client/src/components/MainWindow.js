@@ -77,22 +77,27 @@ function MainWindow() {
   };
 
   const handleUpdate = (updateId, updateModel, updateCapacity, updateType) => {
-    fetch(
-      `/update/${updateId}/${updateModel}/${updateCapacity}/${updateType}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }
-    )
+    const airplane = {
+      model: updateModel,
+      capacity: updateCapacity,
+      type: updateType,
+    };
+    fetch(`/update/${updateId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        airplane,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));
   };
 
   const handleSort = () => {
-    fetch("/sort", {
-      method: "POST",
+    fetch("/sort/capacity", {
+      method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -103,7 +108,7 @@ function MainWindow() {
 
   const handleSortByType = () => {
     fetch("/sort/type", {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

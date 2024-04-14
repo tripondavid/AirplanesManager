@@ -4,7 +4,7 @@ const app = express();
 const airplaneRoutes = require("./routes/airplanesRoutes");
 
 const corsOptions = {
-  methods: "GET,POST,DELETE",
+  methods: "GET,POST,DELETE,PUT",
   allowedHeaders: "Content-Type,Authorization",
 };
 

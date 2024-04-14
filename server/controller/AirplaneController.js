@@ -52,9 +52,9 @@ const airplaneUpdate = (req, res) => {
     res.sendStatus(404);
     return;
   }
-  const model = req.params.model.trim();
-  const capacity = parseInt(req.params.capacity.trim());
-  const type = req.params.type.trim();
+  const model = req.body.airplane.model;
+  const capacity = parseInt(req.body.airplane.capacity);
+  const type = req.body.airplane.type;
 
   airplaneRepository.updateAirplaneById(id, model, capacity, type);
   const airplanesToSend = prepareArrayListForSend();
