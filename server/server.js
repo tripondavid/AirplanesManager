@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const rateLimit = require("express-rate-limit");
 const airplaneRoutes = require("./routes/airplanesRoutes");
 
 const corsOptions = {
@@ -8,6 +9,12 @@ const corsOptions = {
   allowedHeaders: "Content-Type,Authorization",
 };
 
+const limiter = rateLimit({
+  windowMs: 5000,
+  max: 5,
+});
+
+app.use(limiter);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
