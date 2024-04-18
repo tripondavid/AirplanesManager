@@ -47,6 +47,38 @@ const airplaneDelete = async (req, res) => {
   res.send(airplanes);
 };
 
+const flightsGetById = async (req, res) => {
+  const airplaneId = parseInt(req.params.airplaneId.trim());
+  const flights = await db.getFlightsByAirplaneId(airplaneId);
+
+  res.send(flights);
+};
+
+const flightAdd = async (req, res) => {
+  const flight = req.body.flight;
+  const airplaneId = flight.airplaneId;
+  const destination = flight.destination;
+  const departureTime = flight.departureTime;
+  const arrivalTime = flight.arrivalTime;
+  const flights = await db.addFlight(
+    airplaneId,
+    destination,
+    departureTime,
+    arrivalTime
+  );
+
+  res.send(flights);
+};
+
+const flightDelete = async (req, res) => {
+  const flightId = req.params.id;
+  const airplaneId = req.body.airplaneFlightsId;
+
+  const flights = await db.deleteFlight(flightId, airplaneId);
+
+  res.send(flights);
+};
+
 module.exports = {
   airplaneGet,
   airplanesGetSortedByCapacity,
@@ -54,4 +86,7 @@ module.exports = {
   airplaneUpdate,
   airplaneAdd,
   airplaneDelete,
+  flightsGetById,
+  flightAdd,
+  flightDelete,
 };

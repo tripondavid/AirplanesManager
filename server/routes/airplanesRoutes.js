@@ -18,4 +18,10 @@ router.put("/update/:id", airplaneDatabaseController.airplaneUpdate);
 
 router.delete("/delete/:id", airplaneDatabaseController.airplaneDelete);
 
+router.get("/flights/:airplaneId", airplaneDatabaseController.flightsGetById);
+
+router.post("/add/flight", airplaneDatabaseController.flightAdd);
+
+router.delete("/delete/flight/:id", airplaneDatabaseController.flightDelete);
+
 module.exports = router;

@@ -16,3 +16,13 @@ CREATE TABLE Flights (
     destination varchar(256),
     FOREIGN KEY(airplaneId) REFERENCES Airplanes(id)
 );
+
+
+ALTER TABLE FlightManager.Flights
+DROP FOREIGN KEY flights_ibfk_1;
+
+ALTER TABLE FlightManager.Flights
+ADD CONSTRAINT flights_ibfk_1
+FOREIGN KEY (airplaneId)
+REFERENCES FlightManager.Airplanes(id)
+ON DELETE CASCADE;

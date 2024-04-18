@@ -10,7 +10,6 @@ function PieChart({ airplanes }) {
       {
         label: "Capacity",
         data: airplanes.map((airplane) => airplane.capacity),
-        backgroundcolor: "rgba(75,192,192,1)",
       },
     ],
   });

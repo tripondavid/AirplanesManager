@@ -58,6 +58,28 @@ async function deleteAirplane(id) {
   return getAirplanes();
 }
 
+async function getFlightsByAirplaneId(airplaneId) {
+  const [rows] = await pool.query(`SELECT* FROM Flights WHERE airplaneId = ?`, [
+    airplaneId,
+  ]);
+  return rows;
+}
+
+async function addFlight(airplaneId, destination, departureTime, arrivalTime) {
+  await pool.query(
+    `INSERT INTO Flights(airplaneId, destination, departureTime, arrivalTime) VALUES (?, ?, ?, ?)`,
+    [airplaneId, destination, departureTime, arrivalTime]
+  );
+
+  return getFlightsByAirplaneId(airplaneId);
+}
+
+async function deleteFlight(flightId, airplaneId) {
+  await pool.query(`DELETE FROM Flights WHERE id = ?`, [flightId]);
+
+  return getFlightsByAirplaneId(airplaneId);
+}
+
 module.exports = {
   getAirplanes,
   getAirplaneById,
@@ -67,4 +89,7 @@ module.exports = {
   addAirplane,
   updateAirplane,
   deleteAirplane,
+  getFlightsByAirplaneId,
+  addFlight,
+  deleteFlight,
 };
