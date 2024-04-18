@@ -24,4 +24,6 @@ router.post("/add/flight", airplaneDatabaseController.flightAdd);
 
 router.delete("/delete/flight/:id", airplaneDatabaseController.flightDelete);
 
+router.delete("/deleteAll", airplaneDatabaseController.deleteAll); //test purposes
+
 module.exports = router;

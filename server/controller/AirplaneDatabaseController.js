@@ -79,6 +79,11 @@ const flightDelete = async (req, res) => {
   res.send(flights);
 };
 
+const deleteAll = async (req, res) => {
+  await db.deleteAll();
+  res.send(200);
+};
+
 module.exports = {
   airplaneGet,
   airplanesGetSortedByCapacity,
@@ -89,4 +94,5 @@ module.exports = {
   flightsGetById,
   flightAdd,
   flightDelete,
+  deleteAll,
 };

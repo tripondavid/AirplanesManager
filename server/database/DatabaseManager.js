@@ -80,6 +80,13 @@ async function deleteFlight(flightId, airplaneId) {
   return getFlightsByAirplaneId(airplaneId);
 }
 
+async function deleteAll() {
+  //for test purposes
+
+  await pool.query("DELETE FROM Airplanes");
+  return getAirplanes();
+}
+
 module.exports = {
   getAirplanes,
   getAirplaneById,
@@ -92,4 +99,5 @@ module.exports = {
   getFlightsByAirplaneId,
   addFlight,
   deleteFlight,
+  deleteAll,
 };
