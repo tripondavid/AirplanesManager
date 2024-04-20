@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const airplaneController = require("../controller/AirplaneController");
 const airplaneDatabaseController = require("../controller/AirplaneDatabaseController");
+const accountsController = require("../controller/AccountsController");
+
+router.post("/register", accountsController.register);
+
+router.post("/login", accountsController.login);
 
 router.get("/", airplaneDatabaseController.airplaneGet);
 

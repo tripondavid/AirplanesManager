@@ -87,6 +87,30 @@ async function deleteAll() {
   return getAirplanes();
 }
 
+//accounts related
+
+async function findUser(username, password) {
+  const [result] = await pool.query(
+    `SELECT * FROM Users where username = ? AND password = ?`,
+    [username, password]
+  );
+  if (result.length === 0) {
+    return false;
+  }
+  return true;
+}
+
+async function addUser(username, password) {
+  if (findUser(username, password) === true) {
+    return false;
+  }
+  await pool.query(`INSERT INTO Users (username, password) VALUES (?, ?)`, [
+    username,
+    password,
+  ]);
+  return true;
+}
+
 module.exports = {
   getAirplanes,
   getAirplaneById,
@@ -100,4 +124,6 @@ module.exports = {
   addFlight,
   deleteFlight,
   deleteAll,
+  addUser,
+  findUser,
 };
