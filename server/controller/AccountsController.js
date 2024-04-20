@@ -1,17 +1,27 @@
 const db = require("../database/DatabaseManager");
 
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
 const register = async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   if (username === undefined || password === undefined) {
     res.sendStatus(400);
   } else {
-    try {
-      db.addUser(username, password);
-      res.sendStatus(200);
-    } catch (error) {
-      res.sendStatus(400);
-    }
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400); //think about a better response
+        return;
+      }
+
+      if (db.addUser(username, hash) === true) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(400);
+      }
+    });
   }
 };
 
@@ -21,11 +31,19 @@ const login = async (req, res) => {
   if (username === undefined || password === undefined) {
     res.sendStatus(400);
   } else {
-    if (db.findUser(username, password) === true) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(400); //think about a better response
+        return;
+      }
+
+      if (db.findUser(username, hash) === true) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(404);
+      }
+    });
   }
 };
 

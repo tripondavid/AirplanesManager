@@ -101,7 +101,10 @@ async function findUser(username, password) {
 }
 
 async function addUser(username, password) {
-  if (findUser(username, password) === true) {
+  const [result] = await pool.query(`SELECT * FROM Users where username = ?`, [
+    username,
+  ]);
+  if (result.length !== 0) {
     return false;
   }
   await pool.query(`INSERT INTO Users (username, password) VALUES (?, ?)`, [
