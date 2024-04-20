@@ -12,7 +12,7 @@ const register = async (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) {
         console.log(err);
-        res.sendStatus(400); //think about a better response
+        res.sendStatus(400); //TODO: think about a better response
         return;
       }
 
@@ -31,19 +31,17 @@ const login = async (req, res) => {
   if (username === undefined || password === undefined) {
     res.sendStatus(400);
   } else {
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) {
-        console.log(err);
-        res.sendStatus(400); //think about a better response
-        return;
+    bcrypt.compare(
+      password,
+      db.getUserPassword(username),
+      (error, response) => {
+        if (response) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(404);
+        }
       }
-
-      if (db.findUser(username, hash) === true) {
-        res.sendStatus(200);
-      } else {
-        res.sendStatus(404);
-      }
-    });
+    );
   }
 };
 

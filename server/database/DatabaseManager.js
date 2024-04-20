@@ -100,6 +100,14 @@ async function findUser(username, password) {
   return true;
 }
 
+async function getUserPassword(username) {
+  const [result] = await pool.query(
+    `SELECT password FROM Users where username = 4`,
+    [username]
+  );
+  return result;
+}
+
 async function addUser(username, password) {
   const [result] = await pool.query(`SELECT * FROM Users where username = ?`, [
     username,
@@ -129,4 +137,5 @@ module.exports = {
   deleteAll,
   addUser,
   findUser,
+  getUserPassword,
 };
