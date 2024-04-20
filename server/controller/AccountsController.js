@@ -10,17 +10,18 @@ const register = async (req, res) => {
     res.sendStatus(400);
   } else {
     bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) {
+      if (err === true) {
         console.log(err);
         res.sendStatus(400); //TODO: think about a better response
         return;
       }
-
-      if (db.addUser(username, hash) === true) {
-        res.sendStatus(200);
-      } else {
-        res.sendStatus(400);
-      }
+      db.addUser(username, hash).then((success) => {
+        if (success) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
+      });
     });
   }
 };
@@ -31,17 +32,19 @@ const login = async (req, res) => {
   if (username === undefined || password === undefined) {
     res.sendStatus(400);
   } else {
-    bcrypt.compare(
-      password,
-      db.getUserPassword(username),
-      (error, response) => {
+    db.getUserPassword(username).then((result) => {
+      if (result.length === 0) {
+        res.sendStatus(404);
+        return;
+      }
+      bcrypt.compare(password, result[0].password, (error, response) => {
         if (response) {
           res.sendStatus(200);
         } else {
           res.sendStatus(404);
         }
-      }
-    );
+      });
+    });
   }
 };
 

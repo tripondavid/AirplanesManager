@@ -102,7 +102,7 @@ async function findUser(username, password) {
 
 async function getUserPassword(username) {
   const [result] = await pool.query(
-    `SELECT password FROM Users where username = 4`,
+    `SELECT password FROM Users where username = ?`,
     [username]
   );
   return result;
