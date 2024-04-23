@@ -7,6 +7,8 @@ router.post("/register", accountsController.register);
 
 router.post("/login", accountsController.login);
 
+router.get("/check/login", accountsController.checkLogin);
+
 router.get("/", airplaneDatabaseController.airplaneGet);
 
 router.post("/add/plane", airplaneDatabaseController.airplaneAdd);

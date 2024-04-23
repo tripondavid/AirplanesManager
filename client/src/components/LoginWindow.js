@@ -4,12 +4,27 @@ import { useNavigate } from "react-router-dom";
 function LoginWindow() {
   const navigate = useNavigate();
   const handleLogin = () => {
-    navigate("/airplanes");
+    fetch("/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      credentials: "include",
+    }).then((response) => {
+      if (response.status === 200) {
+        document.cookie = "session_id=12345; path=/";
+        navigate("/airplanes");
+      }
+    });
   };
   const handleRegister = () => {
     navigate("/register");
   };
-  const [userName, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   return (
     <>

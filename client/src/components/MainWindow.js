@@ -18,13 +18,33 @@ function MainWindow() {
   const [pageSize, setPageSize] = useState(3);
 
   useEffect(() => {
-    fetch("http://localhost:5000")
+    fetch("/check/login", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
-        if (endIndex === 0) {
-          setEndIndex(pageSize < data.length ? pageSize : data.length);
+        if (data.loggedIn !== true) {
+          window.location.href = "/login";
+          return;
         }
-        setAirplanes(data);
+        fetch("http://localhost:5000", {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (endIndex === 0) {
+              setEndIndex(pageSize < data.length ? pageSize : data.length);
+            }
+            setAirplanes(data);
+          });
       });
   }, []);
 
@@ -55,6 +75,7 @@ function MainWindow() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));
@@ -71,6 +92,7 @@ function MainWindow() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));
@@ -90,6 +112,7 @@ function MainWindow() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));
@@ -101,6 +124,7 @@ function MainWindow() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));
@@ -112,6 +136,7 @@ function MainWindow() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setAirplanes(data));

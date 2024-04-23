@@ -9,7 +9,9 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
   const [arrivalTime, setArrivalTime] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/flights/${airplaneFlightsId}`)
+    fetch(`http://localhost:5000/flights/${airplaneFlightsId}`, {
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         setFlights(data);
@@ -41,6 +43,7 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setFlights(data));
@@ -58,6 +61,7 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => setFlights(data));

@@ -101,10 +101,9 @@ async function findUser(username, password) {
 }
 
 async function getUserPassword(username) {
-  const [result] = await pool.query(
-    `SELECT password FROM Users where username = ?`,
-    [username]
-  );
+  const [result] = await pool.query(`SELECT * FROM Users where username = ?`, [
+    username,
+  ]);
   return result;
 }
 
