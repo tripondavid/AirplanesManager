@@ -16,8 +16,20 @@ function MainWindow() {
   const [isNextDisabled, setIsNextDisabled] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(3);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      await checkLoginStatus();
+      if (loggedIn) {
+        refreshAirplanesList();
+      }
+    };
+
+    fetchData();
+  }, [loggedIn]);
+
+  const checkLoginStatus = async () => {
     fetch("/check/login", {
       method: "GET",
       headers: {
@@ -29,24 +41,29 @@ function MainWindow() {
       .then((data) => {
         if (data.loggedIn !== true) {
           window.location.href = "/login";
-          return;
+          setLoggedIn(false);
+        } else {
+          setLoggedIn(true);
         }
-        fetch("http://localhost:5000", {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-          credentials: "include",
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (endIndex === 0) {
-              setEndIndex(pageSize < data.length ? pageSize : data.length);
-            }
-            setAirplanes(data);
-          });
       });
-  }, []);
+  };
+
+  const refreshAirplanesList = async () => {
+    fetch("http://localhost:5000", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (endIndex === 0) {
+          setEndIndex(pageSize < data.length ? pageSize : data.length);
+        }
+        setAirplanes(data);
+      });
+  };
 
   const handleChangeModel = (event) => {
     setModel(event.target.value);
