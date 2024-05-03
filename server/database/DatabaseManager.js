@@ -37,11 +37,31 @@ async function getFlights() {
 }
 
 async function addAirplane(model, capacity, type) {
-  await pool.query(
-    `INSERT INTO Airplanes(model, capacity, type) VALUES (?, ?, ?)`,
-    [model, capacity, type]
-  );
-  return getAirplanes();
+  let insertedAirplane;
+
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    await connection.query(
+      `INSERT INTO Airplanes(model, capacity, type) VALUES (?, ?, ?)`,
+      [model, capacity, type]
+    );
+    const [result] = await connection.query("SELECT LAST_INSERT_ID() as id");
+    const lastInsertId = result[0].id;
+
+    await connection.commit();
+
+    insertedAirplane = await getAirplaneById(lastInsertId);
+  } catch (err) {
+    console.log("error add2");
+    await connection.rollback();
+    throw err;
+  } finally {
+    connection.release();
+  }
+
+  return insertedAirplane;
 }
 
 async function updateAirplane(id, model, capacity, type) {
@@ -49,13 +69,32 @@ async function updateAirplane(id, model, capacity, type) {
     `UPDATE Airplanes SET model = ?, capacity = ?, type = ? WHERE id = ?`,
     [model, capacity, type, id]
   );
-  return getAirplanes();
+  return getAirplaneById(id);
 }
 
 async function deleteAirplane(id) {
-  await pool.query(`DELETE FROM Airplanes WHERE id = ?`, [id]);
+  let affectedRows = 0;
 
-  return getAirplanes();
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    const [result] = await connection.query(
+      `DELETE FROM Airplanes WHERE id = ?`,
+      [id]
+    );
+    affectedRows = result.affectedRows;
+
+    await connection.commit();
+  } catch (error) {
+    console.error("Error deleting airplane:", error);
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+
+  return affectedRows; //TODO: change in controller the behavior
 }
 
 async function getFlightsByAirplaneId(airplaneId) {
@@ -71,18 +110,67 @@ async function addFlight(airplaneId, destination, departureTime, arrivalTime) {
     [airplaneId, destination, departureTime, arrivalTime]
   );
 
-  return getFlightsByAirplaneId(airplaneId);
+  let insertedFlight;
+
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    await connection.query(
+      `INSERT INTO Flights(airplaneId, destination, departureTime, arrivalTime) VALUES (?, ?, ?, ?)`,
+      [airplaneId, destination, departureTime, arrivalTime]
+    );
+    const [result] = await connection.query("SELECT LAST_INSERT_ID() as id");
+    const lastInsertId = result[0].id;
+
+    await connection.commit();
+
+    insertedFlight = await getFlightById(lastInsertId);
+  } catch (err) {
+    console.log("error add2");
+    await connection.rollback();
+    throw err;
+  } finally {
+    connection.release();
+  }
+
+  return insertedFlight;
 }
 
-async function deleteFlight(flightId, airplaneId) {
-  await pool.query(`DELETE FROM Flights WHERE id = ?`, [flightId]);
-
-  return getFlightsByAirplaneId(airplaneId);
+async function getFlightById(flightId) {
+  const [row] = await pool.query(`SELECT * FROM Flights WHERE id = ?`, [
+    flightId,
+  ]);
+  return row;
 }
 
+async function deleteFlight(flightId) {
+  let affectedRows = 0;
+
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
+
+  try {
+    const [result] = await connection.query(
+      `DELETE FROM Flights WHERE id = ?`,
+      [flightId]
+    );
+    affectedRows = result.affectedRows;
+
+    await connection.commit();
+  } catch (error) {
+    console.error("Error deleting flight:", error);
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+
+  return affectedRows;
+}
+
+//for test purposes
 async function deleteAll() {
-  //for test purposes
-
   await pool.query("DELETE FROM Airplanes");
   return getAirplanes();
 }

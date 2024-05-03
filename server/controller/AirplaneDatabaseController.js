@@ -17,34 +17,32 @@ const airplanesGetSortedByType = async (req, res) => {
 
 const airplaneUpdate = async (req, res) => {
   const id = parseInt(req.params.id);
-  const model = req.body.airplane.model;
-  const capacity = parseInt(req.body.airplane.capacity);
-  const type = req.body.airplane.type;
-  const airplanesWithUpdatedPlane = await db.updateAirplane(
-    id,
-    model,
-    capacity,
-    type
-  );
+  const model = req.body.model;
+  const capacity = parseInt(req.body.capacity);
+  const type = req.body.type;
+  const updatedPlane = await db.updateAirplane(id, model, capacity, type);
 
-  res.send(airplanesWithUpdatedPlane);
+  res.send(updatedPlane);
 };
 
 const airplaneAdd = async (req, res) => {
-  const airplane = req.body.airplane;
-  const model = airplane.model;
-  const capacity = airplane.capacity;
-  const type = airplane.type;
-  const airplanes = await db.addAirplane(model, capacity, type);
+  const model = req.body.model;
+  const capacity = req.body.capacity;
+  const type = req.body.type;
+  const addedAirplane = await db.addAirplane(model, capacity, type);
 
-  res.send(airplanes);
+  res.send(addedAirplane);
 };
 
 const airplaneDelete = async (req, res) => {
   const id = parseInt(req.params.id.trim());
-  const airplanes = await db.deleteAirplane(id);
+  const numberOfAffectedRows = await db.deleteAirplane(id);
 
-  res.send(airplanes);
+  if (numberOfAffectedRows > 0) {
+    res.send({ id: id });
+  } else {
+    res.sendStatus(404);
+  }
 };
 
 const flightsGetById = async (req, res) => {
@@ -55,28 +53,30 @@ const flightsGetById = async (req, res) => {
 };
 
 const flightAdd = async (req, res) => {
-  const flight = req.body.flight;
-  const airplaneId = flight.airplaneId;
-  const destination = flight.destination;
-  const departureTime = flight.departureTime;
-  const arrivalTime = flight.arrivalTime;
-  const flights = await db.addFlight(
+  const airplaneId = req.body.airplaneId;
+  const destination = req.body.destination;
+  const departureTime = req.body.departureTime;
+  const arrivalTime = req.body.arrivalTime;
+  const addedFlight = await db.addFlight(
     airplaneId,
     destination,
     departureTime,
     arrivalTime
   );
 
-  res.send(flights);
+  res.send(addedFlight);
 };
 
 const flightDelete = async (req, res) => {
   const flightId = req.params.id;
-  const airplaneId = req.body.airplaneFlightsId;
 
-  const flights = await db.deleteFlight(flightId, airplaneId);
+  const numberOfAffectedRows = await db.deleteFlight(flightId, airplaneId);
 
-  res.send(flights);
+  if (numberOfAffectedRows > 0) {
+    res.send({ id: flightId });
+  } else {
+    res.sendStatus(404);
+  }
 };
 
 const deleteAll = async (req, res) => {
