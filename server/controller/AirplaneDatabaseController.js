@@ -57,6 +57,9 @@ const flightAdd = async (req, res) => {
   const destination = req.body.destination;
   const departureTime = req.body.departureTime;
   const arrivalTime = req.body.arrivalTime;
+  console.log(
+    airplaneId + " " + destination + " " + departureTime + " " + arrivalTime
+  );
   const addedFlight = await db.addFlight(
     airplaneId,
     destination,
@@ -70,7 +73,7 @@ const flightAdd = async (req, res) => {
 const flightDelete = async (req, res) => {
   const flightId = req.params.id;
 
-  const numberOfAffectedRows = await db.deleteFlight(flightId, airplaneId);
+  const numberOfAffectedRows = await db.deleteFlight(flightId);
 
   if (numberOfAffectedRows > 0) {
     res.send({ id: flightId });

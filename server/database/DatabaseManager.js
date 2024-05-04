@@ -105,11 +105,6 @@ async function getFlightsByAirplaneId(airplaneId) {
 }
 
 async function addFlight(airplaneId, destination, departureTime, arrivalTime) {
-  await pool.query(
-    `INSERT INTO Flights(airplaneId, destination, departureTime, arrivalTime) VALUES (?, ?, ?, ?)`,
-    [airplaneId, destination, departureTime, arrivalTime]
-  );
-
   let insertedFlight;
 
   const connection = await pool.getConnection();
@@ -133,7 +128,7 @@ async function addFlight(airplaneId, destination, departureTime, arrivalTime) {
   } finally {
     connection.release();
   }
-
+  console.log(insertedFlight);
   return insertedFlight;
 }
 

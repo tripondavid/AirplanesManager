@@ -9,6 +9,10 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
   const [arrivalTime, setArrivalTime] = useState("");
 
   useEffect(() => {
+    refreshFlights();
+  }, []);
+
+  const refreshFlights = () => {
     fetch(`http://localhost:5000/flights/${airplaneFlightsId}`, {
       credentials: "include",
     })
@@ -16,7 +20,7 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
       .then((data) => {
         setFlights(data);
       });
-  }, []);
+  };
 
   const handleChangeDestination = (event) => {
     setDestination(event.target.value);
@@ -31,22 +35,19 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
   };
 
   const handleAddFlight = () => {
-    const flight = {
-      airplaneId: airplaneFlightsId,
-      destination: destination,
-      departureTime: departureTime,
-      arrivalTime: arrivalTime,
-    };
     fetch("/add/flight", {
       method: "POST",
-      body: JSON.stringify({ flight }),
+      body: JSON.stringify({
+        airplaneId: airplaneFlightsId,
+        destination: destination,
+        departureTime: departureTime,
+        arrivalTime: arrivalTime,
+      }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setFlights(data));
+    }).then(refreshFlights);
 
     inputs.forEach((input) => (input.value = ""));
   };
@@ -62,9 +63,7 @@ function FlightModal({ toggleModal, airplaneFlightsId }) {
         "Content-type": "application/json; charset=UTF-8",
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setFlights(data));
+    }).then(refreshFlights);
   };
 
   return (

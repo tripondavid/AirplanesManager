@@ -109,29 +109,22 @@ function MainWindow() {
         "Content-type": "application/json; charset=UTF-8",
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setAirplanes(data));
+    }).then(refreshAirplanesList);
   };
 
   const handleUpdate = (updateId, updateModel, updateCapacity, updateType) => {
-    const airplane = {
-      model: updateModel,
-      capacity: updateCapacity,
-      type: updateType,
-    };
     fetch(`/update/${updateId}`, {
       method: "PUT",
       body: JSON.stringify({
-        airplane,
+        model: updateModel,
+        capacity: updateCapacity,
+        type: updateType,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setAirplanes(data));
+    }).then(refreshAirplanesList);
   };
 
   const handleSort = () => {
