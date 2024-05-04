@@ -12,7 +12,7 @@ function AirplaneTable({
   endIndex,
 }) {
   const [updateId, setUpdateId] = useState(-1);
-  const slicedAirplanes = airplanes.slice(startIndex, endIndex);
+  //const slicedAirplanes = airplanes.slice(startIndex, endIndex);
   const [flightModal, setFlightModal] = useState(false);
   const [airplaneFlightsId, setAirplaneFlightsId] = useState(-1);
 
@@ -37,7 +37,7 @@ function AirplaneTable({
           </tr>
         </thead>
         <tbody>
-          {slicedAirplanes.map((airplane) =>
+          {airplanes.map((airplane) =>
             airplane.id === updateId ? (
               <EditAirplane
                 updateId={updateId}

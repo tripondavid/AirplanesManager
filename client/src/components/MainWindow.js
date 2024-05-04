@@ -83,19 +83,18 @@ function MainWindow() {
   };
 
   const handleAddPlane = () => {
-    const airplane = { model: model, capacity: capacity, type: type };
     fetch("/add/plane", {
       method: "POST",
       body: JSON.stringify({
-        airplane,
+        model: model,
+        capacity: capacity,
+        type: type,
       }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => setAirplanes(data));
+    }).then(refreshAirplanesList);
 
     inputs.forEach((input) => (input.value = ""));
   };
@@ -267,6 +266,7 @@ function MainWindow() {
         />
       </div>
 
+      {/*
       <div className="pagination-div">
         <button
           type="button"
@@ -291,6 +291,7 @@ function MainWindow() {
           <option value={9}>9</option>
         </select>
       </div>
+  */}
 
       <div id="pie-chart" style={{ width: 700 }}>
         <PieChart airplanes={airplanes} />
