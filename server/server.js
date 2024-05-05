@@ -40,6 +40,21 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
-app.use("/", airplaneRoutes);
+// Middleware to check if user is logged in
+const isLoggedIn = (req, res, next) => {
+  if (
+    !req.cookies.userId &&
+    req.path !== "/login" &&
+    req.path !== "/register" &&
+    req.path !== "/check/login"
+  ) {
+    return res.status(401).send("Unauthorized");
+  }
+  next();
+};
+
+app.use("/", isLoggedIn, airplaneRoutes);
+
+//app.use("/", airplaneRoutes);
 
 app.listen(5000);

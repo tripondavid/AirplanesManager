@@ -57,9 +57,6 @@ const flightAdd = async (req, res) => {
   const destination = req.body.destination;
   const departureTime = req.body.departureTime;
   const arrivalTime = req.body.arrivalTime;
-  console.log(
-    airplaneId + " " + destination + " " + departureTime + " " + arrivalTime
-  );
   const addedFlight = await db.addFlight(
     airplaneId,
     destination,

@@ -128,7 +128,7 @@ async function addFlight(airplaneId, destination, departureTime, arrivalTime) {
   } finally {
     connection.release();
   }
-  console.log(insertedFlight);
+
   return insertedFlight;
 }
 
